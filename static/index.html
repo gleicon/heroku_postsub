@@ -33,9 +33,10 @@
 				<p>PubSub message bus for heroku based on HTTP. Send messages thru POST requests, follow up with a GET request that binds to a COMET endpoint. Routes are created dynamically. You can even bind to a route that never received messages.</p>
 			</header>
 			<h3>Quickstart</h3>
-				<p>open a terminal and type: <pre> curl http://postsub.heroku.com/lmao</pre></p>
-				<p>open a second term and type: <pre>curl -d 'body=sup' http://postsub.heroku.com/lmao</pre></p>
-				<p>watch first terminal in amazement. Bear in mind that depending on the message size, it can take some time to be rendered on a browser, but will be retrieved by javascript.</p>
+				<p>open a terminal and type: <pre> curl http://postsub.herokuapp.com/lmao</pre></p>
+				<p>open a second term and type: <pre>curl -d 'body=sup' http://postsub.herokuapp.com/lmao</pre></p>
+                                <p>watch first terminal in amazement. Bear in mind that depending on the message size, it can take some time to be rendered on a browser, but will be retrieved by javascript.</p>
+                                <p><a href='http://www.7co.cc'>7co.cc</a></p>
 		</article>
 	</div>
 	</div>
@@ -46,11 +47,5 @@
 	<script src="js/libs/dd_belatedpng.js"></script>
 	<script> DD_belatedPNG.fix('img, .png_bg');</script>
 	<![endif]-->
-	<script>
-		var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']]; // Change UA-XXXXX-X to be your site's ID
-		(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.async=1;
-		g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-		s.parentNode.insertBefore(g,s)}(document,'script'));
-	</script>
 </body>
 </html>
