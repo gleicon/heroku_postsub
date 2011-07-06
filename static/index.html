@@ -9,7 +9,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	
 	<title>Heroku's PUBSUB</title>
-	<meta name="description" content="nodester based pubsub bus">
+	<meta name="description" content="http based pubsub bus">
 	<meta name="author" content="Gleicon Moraes">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,8 +33,8 @@
 				<p>PubSub message bus for heroku based on HTTP. Send messages thru POST requests, follow up with a GET request that binds to a COMET endpoint. Routes are created dynamically. You can even bind to a route that never received messages.</p>
 			</header>
 			<h3>Quickstart</h3>
-				<p>open a terminal and type: <pre> curl http://pubsub.nodester.com/lmao</pre></p>
-				<p>open a second term and type: <pre>curl -d 'body=sup' http://pubsub.nodester.com/lmao</pre></p>
+				<p>open a terminal and type: <pre> curl http://postsub.heroku.com/lmao</pre></p>
+				<p>open a second term and type: <pre>curl -d 'body=sup' http://postsub.heroku.com/lmao</pre></p>
 				<p>watch first terminal in amazement. Bear in mind that depending on the message size, it can take some time to be rendered on a browser, but will be retrieved by javascript.</p>
 		</article>
 	</div>
