@@ -1,0 +1,6 @@
+node + express.js test for pubsub over heroku
+
+http://postsub.herokuapp.com/c/lmao - comet endpoint for route lmao
+http://postsub.herokuapp.com/e/lmao - server sent events endpoint for route lmao
+http://postsub.herokuapp.com/lmao - POST data using body= parameter to broadcast to all connected 'lmao' peers 
+
