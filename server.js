@@ -6,105 +6,55 @@ var http = require("http")
 var qs = require("querystring");
 var url = require("url")
 var fs = require('fs')
+var express = require('express')
 
-process.on('uncaughtException', function (err) {
-  console.log('exception: ' + err);
-});
-
-
-var users = 0;
+var app = express.createServer(express.logger())
 var presence = new Array();
 
-function connected_users() {
-  console.log('Connected users: '+users);
-  setTimeout(connected_users, 30 * 1000);
-}
+app.use(express.bodyParser());
 
-setTimeout(connected_users, 1000);
-
-console.log('Initializing COMET pub/sub server');
-
-function s404(res) {
-  res.writeHead(404, {'Content-type':'text/plain'});
-  res.write('not found');
-  res.end();
-}
-
-function render(res, path, contenttype) {
-  fs.readFile(__dirname + '/static'+ path, function(err, data) {
-    console.log('sending: '+ path);
-    if (err) return s404(res);
-    res.writeHead(200, {'Content-Type': contenttype })
-    res.write(data, 'utf8');
-    res.end();
-  });
-}
-
-server = http.createServer(function (req, res) {
-  l = function(m) { 
-    res.write(m);
-    res.write('\n');
-  }
-
-  path = url.parse(req.url).pathname
-  switch(req.method) {
-    case 'GET':
-      switch(path) {
-        case '':
-        case '/':
-        case '/index.html':
-          render(res, '/index.html', 'text/html');
-          break
-
-        case '/css/style.css':
-          render(res, path, 'text/css');
-          break
-                                            
-        case '/js/libs/jquery-1.5.1.min.js':
-        case '/js/libs/modernizr-1.7.min.js':
-        case '/js/script.js':
-          render(res, path, 'text/javascript');
-          break
-        case '/robots.txt':
-          render(res, path, 'text/plain');
-        default:
-          req.connection.setTimeout(0);
-          res.writeHead(200, {'Content-type':'text/plain'});
-          if (presence[path] == null) presence[path] = new process.EventEmitter();
-          presence[path].addListener('message', l);
-          break
-      }
-      break
-                                      
-    case 'POST':
-      var m ="";
-      req.on('data', function(d) { m = m + d });
-      req.on('end', function(){
-        params = qs.parse(m);
-        m = params['body'];
-        if (m != null) {
-          if (presence[path] == null) presence[path] = new process.EventEmitter()
-          presence[path].emit('message', m); //dispatch
-        }
-      });		
-      res.writeHead(200, {'Content-type':'text/plain'});
-      res.write('message posted\n');
-      res.end();
-      break
-                              
-    default:
-      res.writeHead(401, {'Content-type':'text/plain'});
-      res.write('Method not allowed');
-      res.end();
-      break
-  }
+process.on('uncaughtException', function (err) {
+  console.log('exception: ' + err)
 });
 
-server.maxConnections = 10000;
-server.on('connection', function(s) { console.log('conn: ' + s.address()); users++; });
-server.on('close', function() {if (users > 0) users--; }); 
-server.on('clientError', function() {if (users > 0) users--; }); 
+app.get('/:file', function(req, res){res.sendfile('/static/' + req.params.file)});
 
+app.get('/c/:route', function(req, res){
+  l = function(m) { res.write(m + '\n'); } 
+  route = req.params.route
+  req.connection.setTimeout(0)
+  res.header('Content-type', 'text/plain')
+  if (presence[route] == null) { presence[route] = process.EventEmitter() }
+  presence[route].addListener('comet_message', l)
+})
+
+app.get('/e/:route', function(req, res){ 
+  route = req.params.route
+  l = function(m) { 
+    res.write('id: '+ route + '\n'); 
+    res.write('data: '+ m + '\n\n'); 
+  } 
+  res.header('Content-Type', 'text/event-stream')
+  res.header('Cache-Control', 'no-cache')
+  res.header('Connection', 'keep-alive')
+  if (presence[route] == null) { presence[route] = process.EventEmitter() }
+  presence[route].addListener('sse_message', l)
+})
+
+app.post('/:route', function(req, res){
+  route = req.params.route
+  if (presence[route] == null) {
+    res.send('route '+ route+ ' doesnt exists', 404)
+  } else {
+      if (presence[route] != null)  {
+          presence[route].emit('comet_message', req.body.body) 
+          presence[route].emit('sse_message', req.body.body)
+      }
+  }
+  res.send('message posted\n');
+})
+                                        
 var port = process.env.PORT || 3000;
-server.listen(port);
-
+app.listen(port, function() {
+  console.log('Initializing COMET pub/sub server')
+});
