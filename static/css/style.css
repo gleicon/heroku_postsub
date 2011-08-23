@@ -139,17 +139,15 @@ nav a{
 }
 
 aside{
-	color:white;
+	font:16px/26px Helvetica, Helvetica Neue, Arial;
+	color:#36393D;
 	padding:20px;
 	float:right;
 	height:500px;
 	width:200px;
-	background-color:#f16529;
-	border-bottom:20px solid #e44d26;
+	background-color:#A3B83A;
+	border-bottom:20px solid #73880A;
 	margin-bottom:50px;
-	-webkit-box-shadow:0 0px 40px -10px #AAA;
-	   -moz-box-shadow:0 0px 40px -10px #AAA;
-	        box-shadow:0 0px 40px -10px #AAA;	
 }
 
 #main p{
@@ -196,7 +194,10 @@ article header{
 	top:45px;
 }
 
-
+#sse {
+  width: 180px;
+  word-wrap: break-word;
+}
 
 
 

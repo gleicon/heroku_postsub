@@ -27,19 +27,23 @@
 		</header>
 	</div>
 	<div id="main" class="wrapper">
+        <aside>
+          <div id='sse'></div>
+        </aside>
 		<article>
 			<header>
 				<h2>PubSub for Heroku</h2>
-				<p>PubSub message bus for heroku based on HTTP. Send messages thru POST requests, follow up with a GET request that binds to a COMET endpoint. Routes are created dynamically. You can even bind to a route that never received messages.</p>
+				<p>PubSub message bus for heroku based on HTTP. Send messages thru POST requests, follow up with a GET request that binds to a COMET endpoint or a Server Sent Event URI. Routes are created dynamically. You can even bind to a route that never received messages.</p>
 			</header>
 			<h3>Quickstart</h3>
-				<p>open a terminal and type: <pre> curl http://postsub.herokuapp.com/lmao</pre></p>
-				<p>open a second term and type: <pre>curl -d 'body=sup' http://postsub.herokuapp.com/lmao</pre></p>
+				<p>open a terminal and type: <pre> curl http://postsub.herokuapp.com/c/lmao</pre></p>
+                                <p>open a second term and type: <pre>curl -d 'body=sup' http://postsub.herokuapp.com/lmao</pre></p>
+                                <p> if your browser has Server Sent Events (EventSource) capabilities, check the box on right.</p> 
                                 <p>watch first terminal in amazement. Bear in mind that depending on the message size, it can take some time to be rendered on a browser, but will be retrieved by javascript.</p>
                                 <p><a href='http://www.7co.cc'>7co.cc</a></p>
 		</article>
 	</div>
-	</div>
+        </div>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
 	<script>!window.jQuery && document.write(unescape('%3Cscript src="js/libs/jquery-1.5.1.min.js"%3E%3C/script%3E'))</script>
 	<script src="js/script.js"></script>

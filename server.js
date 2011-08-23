@@ -12,13 +12,13 @@ var app = express.createServer(express.logger())
 var presence = new Array();
 
 app.use(express.bodyParser());
+app.use(express.static(__dirname + '/static'));
 
 process.on('uncaughtException', function (err) {
   console.log('exception: ' + err)
 });
 
-app.get('/:file', function(req, res){res.sendfile('/static/' + req.params.file)});
-
+app.get('/:file', function(req, res){res.sendfile('static/' + req.params.file)});
 app.get('/c/:route', function(req, res){
   l = function(m) { res.write(m + '\n'); } 
   route = req.params.route
@@ -37,7 +37,11 @@ app.get('/e/:route', function(req, res){
   res.header('Content-Type', 'text/event-stream')
   res.header('Cache-Control', 'no-cache')
   res.header('Connection', 'keep-alive')
-  if (presence[route] == null) { presence[route] = process.EventEmitter() }
+  res.header('Transfer-Encoding', '')
+  if (presence[route] == null) { 
+    presence[route] = process.EventEmitter() 
+    presence[route].setMaxListeners(10000)
+  }
   presence[route].addListener('sse_message', l)
 })
 
